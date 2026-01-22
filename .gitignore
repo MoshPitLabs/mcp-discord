@@ -1,0 +1,45 @@
+# Virtual environment
+.venv/
+venv/
+ENV/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Nix
+result
+result-*
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# Sensitive configuration files
+webhooks.json
+*.secret
+*.key
+
+# Config directory (contains webhook URLs - sensitive!)
+# Note: webhooks.json is stored in ~/.config/discord_mcp/ by default

@@ -1,0 +1,12 @@
+{
+  "releases": {
+    "url": "https://discord.com/api/webhooks/YOUR_WEBHOOK_ID/YOUR_WEBHOOK_TOKEN",
+    "description": "Living Lands release announcements",
+    "added_at": "2026-01-22T00:00:00.000000"
+  },
+  "general": {
+    "url": "https://discord.com/api/webhooks/YOUR_WEBHOOK_ID/YOUR_WEBHOOK_TOKEN",
+    "description": "General notifications channel",
+    "added_at": "2026-01-22T00:00:00.000000"
+  }
+}
