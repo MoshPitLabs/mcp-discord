@@ -1,75 +1,78 @@
 {
-  description = "Discord MCP Server - Model Context Protocol server for Discord integration";
+  description = "Discord MCP Server - TypeScript Edition";
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     flake-utils.url = "github:numtide/flake-utils";
   };
 
-  outputs = { self, nixpkgs, flake-utils }:
-    flake-utils.lib.eachDefaultSystem (system:
+  outputs =
+    {
+      self,
+      nixpkgs,
+      flake-utils,
+    }:
+    flake-utils.lib.eachDefaultSystem (
+      system:
       let
         pkgs = nixpkgs.legacyPackages.${system};
-
-        python = pkgs.python312;
-
-        # Python packages available in nixpkgs
-        pythonPackages = ps: with ps; [
-          pydantic
-          httpx
-          pip
-          setuptools
-          wheel
-          virtualenv
-        ];
-
-        pythonEnv = python.withPackages pythonPackages;
       in
       {
-        # Development shell with venv support for MCP
         devShells.default = pkgs.mkShell {
-          buildInputs = [
-            pythonEnv
+          buildInputs = with pkgs; [
+            bun
+            nodejs_23
+            typescript
           ];
 
           shellHook = ''
-            echo "Discord MCP Server Development Environment"
-            echo "============================================"
-            echo "Python: $(python --version)"
+            echo "Discord MCP Server - TypeScript Development Environment"
+            echo "========================================================"
+            echo "Bun version: $(bun --version)"
+            echo "Node version: $(node --version)"
+            echo ""
+            echo "Commands:"
+            echo "  bun install    - Install dependencies"
+            echo "  bun run dev    - Run in development mode"
+            echo "  bun run build  - Build for production"
+            echo "  bun run typecheck - Type check without emitting"
             echo ""
 
-            # Create venv if it doesn't exist
-            if [ ! -d ".venv" ]; then
-              echo "Creating virtual environment..."
-              python -m venv .venv
-              source .venv/bin/activate
-              pip install --upgrade pip
-              pip install mcp
-              echo "MCP SDK installed in .venv"
-            else
-              source .venv/bin/activate
+            # Auto-install dependencies if needed
+            if [ ! -d "node_modules" ]; then
+              echo "Installing dependencies..."
+              bun install
             fi
-
-            echo ""
-            echo "Virtual environment activated!"
-            echo ""
-            echo "To run the server:"
-            echo "  python discord_mcp.py"
-            echo ""
-            echo "To test (will hang waiting for input):"
-            echo "  timeout 2s python discord_mcp.py || echo 'Server started OK'"
           '';
         };
 
-        # For running directly (assumes MCP is installed globally or in PATH)
-        packages.default = pkgs.writeShellScriptBin "discord_mcp" ''
-          cd ${./.}
-          exec ${pythonEnv}/bin/python discord_mcp.py "$@"
+        # Package for running the server
+        packages.default = pkgs.writeShellScriptBin "discord-mcp" ''
+          # Ensure we're in the right directory
+          if [ ! -f "package.json" ]; then
+            echo "Error: Must run from mcp-discord directory" >&2
+            exit 1
+          fi
+
+          # Install dependencies if needed
+          if [ ! -d "node_modules" ]; then
+            echo "Installing dependencies..." >&2
+            ${pkgs.bun}/bin/bun install
+          fi
+
+          # Build if dist doesn't exist or is outdated
+          if [ ! -f "dist/index.js" ] || [ "src/index.ts" -nt "dist/index.js" ]; then
+            echo "Building server..." >&2
+            ${pkgs.bun}/bin/bun run build
+          fi
+
+          # Run the built server
+          exec ${pkgs.bun}/bin/bun run dist/index.js "$@"
         '';
 
         apps.default = {
           type = "app";
-          program = "${self.packages.${system}.default}/bin/discord_mcp";
+          program = "${self.packages.${system}.default}/bin/discord-mcp";
         };
       }
     );
