@@ -13,15 +13,16 @@ import { handleError } from '../utils/errors.js';
 export async function handleSendChangelog(params: unknown): Promise<string> {
   try {
     const validated = sendChangelogInputSchema.parse(params);
+    const webhookName = 'changelog';
 
-    const webhookUrl = await getWebhookUrl(validated.webhookName);
+    const webhookUrl = await getWebhookUrl(webhookName);
     if (!webhookUrl) {
       const webhooks = await loadWebhooks();
       const available = Object.keys(webhooks);
       if (available.length > 0) {
-        return `Error: Webhook '${validated.webhookName}' not found. Available webhooks: ${available.join(', ')}`;
+        return `Error: Webhook '${webhookName}' not found. Available webhooks: ${available.join(', ')}. Use discord_add_webhook to add a webhook named '${webhookName}'.`;
       }
-      return `Error: Webhook '${validated.webhookName}' not found. No webhooks configured. Use add_webhook first.`;
+      return `Error: Webhook '${webhookName}' not found. No webhooks configured. Use discord_add_webhook to add a webhook named '${webhookName}'.`;
     }
 
     if (validated.useEmbed) {

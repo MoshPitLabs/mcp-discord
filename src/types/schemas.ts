@@ -26,7 +26,6 @@ export const webhookConfigSchema = z.object({
 
 // Tool Input Schemas
 export const sendMessageInputSchema = z.object({
-  webhookName: z.string().min(1).max(50),
   content: z.string().min(1).max(2000),
   username: z.string().max(80).optional(),
   avatarUrl: z.string().url().optional(),
@@ -34,7 +33,6 @@ export const sendMessageInputSchema = z.object({
 });
 
 export const sendAnnouncementInputSchema = z.object({
-  webhookName: z.string().min(1).max(50),
   version: z.string().min(1).max(30),
   headline: z.string().min(1).max(256),
   changes: z.array(z.string()).min(1).max(10),
@@ -50,7 +48,6 @@ export const sendAnnouncementInputSchema = z.object({
 });
 
 export const sendTeaserInputSchema = z.object({
-  webhookName: z.string().min(1).max(50),
   version: z.string().min(1).max(30),
   headline: z.string().min(1).max(256),
   highlights: z.array(z.string()).min(1).max(10),
@@ -63,7 +60,6 @@ export const sendTeaserInputSchema = z.object({
 });
 
 export const sendChangelogInputSchema = z.object({
-  webhookName: z.string().min(1).max(50),
   title: z.string().min(1).max(256),
   sections: z
     .array(
