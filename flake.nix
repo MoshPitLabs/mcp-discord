@@ -47,28 +47,31 @@
         };
 
         # Package for running the server
-        packages.default = pkgs.writeShellScriptBin "discord-mcp" ''
-          # Ensure we're in the right directory
-          if [ ! -f "package.json" ]; then
-            echo "Error: Must run from mcp-discord directory" >&2
-            exit 1
-          fi
+        packages.default = pkgs.stdenv.mkDerivation {
+          pname = "discord-mcp-server";
+          version = "0.1.0";
+          src = ./.;
 
-          # Install dependencies if needed
-          if [ ! -d "node_modules" ]; then
-            echo "Installing dependencies..." >&2
-            ${pkgs.bun}/bin/bun install
-          fi
+          nativeBuildInputs = [ pkgs.bun ];
 
-          # Build if dist doesn't exist or is outdated
-          if [ ! -f "dist/index.js" ] || [ "src/index.ts" -nt "dist/index.js" ]; then
-            echo "Building server..." >&2
-            ${pkgs.bun}/bin/bun run build
-          fi
+          buildPhase = ''
+            export HOME=$TMPDIR
+            bun install --frozen-lockfile
+            bun run build
+          '';
 
-          # Run the built server
-          exec ${pkgs.bun}/bin/bun run dist/index.js "$@"
-        '';
+          installPhase = ''
+            mkdir -p $out/lib/discord-mcp
+            cp -r dist node_modules package.json $out/lib/discord-mcp/
+
+            mkdir -p $out/bin
+            cat > $out/bin/discord-mcp <<EOF
+            #!${pkgs.bash}/bin/bash
+            exec ${pkgs.bun}/bin/bun run $out/lib/discord-mcp/dist/index.js "\$@"
+            EOF
+            chmod +x $out/bin/discord-mcp
+          '';
+        };
 
         apps.default = {
           type = "app";

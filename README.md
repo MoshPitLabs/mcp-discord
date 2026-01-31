@@ -7,6 +7,7 @@ A Model Context Protocol (MCP) server for Discord integration via webhooks - Typ
 - **Send Messages**: Post messages to Discord channels via webhooks
 - **Release Announcements**: Send beautifully formatted release announcements with rich embeds
 - **Teaser Announcements**: Send "coming soon" style teasers for upcoming releases
+- **Changelog Posts**: Send structured changelogs (Added/Changed/Fixed) as rich embeds or plain text
 - **Webhook Management**: Add, remove, and list webhook configurations
 - **Secure Storage**: Webhook URLs stored locally with partial URL display for security
 - **Type Safe**: Built with TypeScript and Zod validation for runtime safety
@@ -223,6 +224,25 @@ Remove a webhook configuration.
 List all configured webhooks (URLs partially hidden for security).
 
 **Parameters:**
+- `responseFormat` (optional): `markdown` or `json`
+
+### discord_send_changelog
+
+Send a structured changelog post with sections (e.g., Added/Changed/Fixed).
+
+**Parameters:**
+- `webhookName` (required): Name of configured webhook
+- `title` (required): Changelog title (max 256 chars)
+- `sections` (required): Array of sections (1-25). Each: `{ title: string, items: string[] }`
+- `version` (optional): Version string (e.g., "v1.2.3")
+- `summary` (optional): Intro text (max 2000 chars)
+- `url` (optional): Link to release notes/download
+- `style` (optional): `release` / `hotfix` / `beta` / `custom`
+- `useEmbed` (optional): Use embed format (default: true)
+- `embedColor` (optional): Custom hex color (e.g., "#5865F2")
+- `thumbnailUrl` (optional): Custom thumbnail URL
+- `footerText` (optional): Custom footer text
+- `username` (optional): Override webhook username
 - `responseFormat` (optional): `markdown` or `json`
 
 ## Development

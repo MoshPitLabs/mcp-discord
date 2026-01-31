@@ -8,6 +8,11 @@ import { join } from 'path';
 export const CHARACTER_LIMIT = 25000;
 export const DISCORD_MESSAGE_LIMIT = 2000;
 
+// Discord embed limits
+export const DISCORD_EMBED_FIELDS_LIMIT = 25;
+export const DISCORD_EMBED_FIELD_VALUE_LIMIT = 1024;
+export const DISCORD_EMBED_TOTAL_CHARS_LIMIT = 6000;
+
 export const CONFIG_DIR = process.env.DISCORD_MCP_CONFIG_DIR || 
   join(homedir(), '.config', 'discord_mcp');
 

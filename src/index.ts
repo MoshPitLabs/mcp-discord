@@ -17,6 +17,7 @@ import {
 import { handleSendMessage } from './tools/sendMessage.js';
 import { handleSendAnnouncement } from './tools/sendAnnouncement.js';
 import { handleSendTeaser } from './tools/sendTeaser.js';
+import { handleSendChangelog } from './tools/sendChangelog.js';
 import { handleAddWebhook } from './tools/addWebhook.js';
 import { handleRemoveWebhook } from './tools/removeWebhook.js';
 import { handleListWebhooks } from './tools/listWebhooks.js';
@@ -188,6 +189,82 @@ server.setRequestHandler(ListToolsRequestSchema, async () => ({
       },
     },
     {
+      name: 'discord_send_changelog',
+      description: 'Send a structured changelog post to Discord. Creates a rich embed with sections (e.g., Added/Changed/Fixed) or can send as plain text.',
+      inputSchema: {
+        type: 'object',
+        properties: {
+          webhookName: {
+            type: 'string',
+            description: 'Name of the configured webhook to use',
+          },
+          title: {
+            type: 'string',
+            description: 'Changelog title (max 256 characters)',
+          },
+          sections: {
+            type: 'array',
+            description: 'Changelog sections (1-25). Each section has a title and list of items.',
+            items: {
+              type: 'object',
+              properties: {
+                title: { type: 'string', description: 'Section title (e.g., "Added")' },
+                items: {
+                  type: 'array',
+                  items: { type: 'string' },
+                  description: 'Section items (1-25)',
+                },
+              },
+              required: ['title', 'items'],
+            },
+          },
+          version: {
+            type: 'string',
+            description: 'Optional: Version string (e.g., "v1.2.3")',
+          },
+          summary: {
+            type: 'string',
+            description: 'Optional: Summary/intro text (max 2000 characters)',
+          },
+          url: {
+            type: 'string',
+            description: 'Optional: URL to release notes/download',
+          },
+          style: {
+            type: 'string',
+            enum: ['release', 'hotfix', 'beta', 'custom'],
+            description: 'Changelog style: release (green), hotfix (red), beta (yellow), custom (blue)',
+          },
+          useEmbed: {
+            type: 'boolean',
+            description: 'Use rich embed format (default: true)',
+          },
+          embedColor: {
+            type: 'string',
+            description: 'Optional: Custom hex color for embed (e.g., "#5865F2")',
+          },
+          thumbnailUrl: {
+            type: 'string',
+            description: 'Optional: URL for thumbnail image in embed',
+          },
+          footerText: {
+            type: 'string',
+            description: 'Optional: Custom footer text',
+          },
+          username: {
+            type: 'string',
+            description: 'Optional: Override webhook username for this message',
+          },
+          responseFormat: {
+            type: 'string',
+            enum: ['markdown', 'json'],
+            description: 'Output format for the response (default: markdown)',
+          },
+        },
+        required: ['webhookName', 'title', 'sections'],
+      },
+    },
+    {
       name: 'discord_add_webhook',
       description: 'Add or update a Discord webhook configuration. Webhooks can be created in Discord: Server Settings > Integrations > Webhooks. The configuration is stored locally and persists between sessions.',
       inputSchema: {
@@ -259,6 +336,10 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
       case 'discord_send_teaser':
         result = await handleSendTeaser(args);
         break;
+
+      case 'discord_send_changelog':
+        result = await handleSendChangelog(args);
+        break;
       
       case 'discord_add_webhook':
         result = await handleAddWebhook(args);
@@ -296,7 +377,7 @@ async function main() {
   // Log to stderr (stdout is reserved for MCP protocol)
   console.error('Discord MCP Server v2.0.0 running on stdio');
   console.error('Server name: discord');
-  console.error('Tools: 6 (send_message, send_announcement, send_teaser, add_webhook, remove_webhook, list_webhooks)');
+  console.error('Tools: 7 (send_message, send_announcement, send_teaser, send_changelog, add_webhook, remove_webhook, list_webhooks)');
 }
 
 // Error handling for startup
