@@ -1,12 +1,17 @@
 {
   "releases": {
     "url": "https://discord.com/api/webhooks/YOUR_WEBHOOK_ID/YOUR_WEBHOOK_TOKEN",
-    "description": "Living Lands release announcements",
-    "added_at": "2026-01-22T00:00:00.000000"
+    "description": "Release announcements",
+    "added_at": "2000-01-01T00:00:00.000Z"
+  },
+  "changelog": {
+    "url": "https://discord.com/api/webhooks/YOUR_WEBHOOK_ID/YOUR_WEBHOOK_TOKEN",
+    "description": "Changelogs",
+    "added_at": "2000-01-01T00:00:00.000Z"
   },
   "general": {
     "url": "https://discord.com/api/webhooks/YOUR_WEBHOOK_ID/YOUR_WEBHOOK_TOKEN",
-    "description": "General notifications channel",
-    "added_at": "2026-01-22T00:00:00.000000"
+    "description": "General announcements",
+    "added_at": "2000-01-01T00:00:00.000Z"
   }
 }
