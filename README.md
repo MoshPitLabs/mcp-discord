@@ -94,13 +94,28 @@ opencode mcp list
 
 ### 3. Configure Webhooks
 
+Each tool uses a dedicated webhook, allowing you to route different message types to different channels:
+
+- **`messages`** - Used by `discord_send_message`
+- **`releases`** - Used by `discord_send_announcement`
+- **`teasers`** - Used by `discord_send_teaser`
+- **`changelog`** - Used by `discord_send_changelog`
+
 **To get your Discord webhook URL:**
 1. Go to your Discord server
 2. **Server Settings** → **Integrations** → **Webhooks**
 3. Click **New Webhook**
-4. Choose a name and channel
+4. Choose a name and channel (e.g., "releases" webhook → #releases channel)
 5. **Copy Webhook URL**
-6. Use the `discord_add_webhook` tool in OpenCode to add it
+6. Use the `discord_add_webhook` tool in OpenCode to add it with the appropriate name
+
+**Example setup:**
+```
+discord_add_webhook messages <webhook-url> "General messages"
+discord_add_webhook releases <webhook-url> "Release announcements"
+discord_add_webhook teasers <webhook-url> "Teaser announcements"
+discord_add_webhook changelog <webhook-url> "Changelog posts"
+```
 
 ### Environment Variables (Optional)
 
@@ -146,10 +161,9 @@ Send a teaser for v3.0.0 with:
 
 ### discord_send_message
 
-Send a plain text message to a Discord channel.
+Send a plain text message to a Discord channel. **Uses the `messages` webhook.**
 
 **Parameters:**
-- `webhookName` (required): Name of configured webhook
 - `content` (required): Message content (max 2000 chars)
 - `username` (optional): Override webhook username
 - `avatarUrl` (optional): Override webhook avatar
@@ -157,10 +171,9 @@ Send a plain text message to a Discord channel.
 
 ### discord_send_announcement
 
-Send a formatted release announcement with rich Discord embeds.
+Send a formatted release announcement with rich Discord embeds. **Uses the `releases` webhook.**
 
 **Parameters:**
-- `webhookName` (required): Name of configured webhook
 - `version` (required): Version number (e.g., "v2.6.0-beta")
 - `headline` (required): Main announcement headline (max 256 chars)
 - `changes` (required): Array of changes/features (1-10 items)
@@ -187,10 +200,9 @@ Send a formatted release announcement with rich Discord embeds.
 
 ### discord_send_teaser
 
-Send a teaser/preview announcement for upcoming releases.
+Send a teaser/preview announcement for upcoming releases. **Uses the `teasers` webhook.**
 
 **Parameters:**
-- `webhookName` (required): Name of configured webhook
 - `version` (required): Version number
 - `headline` (required): Teaser headline
 - `highlights` (required): Array of features to highlight (1-10 items)
@@ -228,10 +240,9 @@ List all configured webhooks (URLs partially hidden for security).
 
 ### discord_send_changelog
 
-Send a structured changelog post with sections (e.g., Added/Changed/Fixed).
+Send a structured changelog post with sections (e.g., Added/Changed/Fixed). **Uses the `changelog` webhook.**
 
 **Parameters:**
-- `webhookName` (required): Name of configured webhook
 - `title` (required): Changelog title (max 256 chars)
 - `sections` (required): Array of sections (1-25). Each: `{ title: string, items: string[] }`
 - `version` (optional): Version string (e.g., "v1.2.3")

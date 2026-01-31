@@ -41,14 +41,10 @@ server.setRequestHandler(ListToolsRequestSchema, async () => ({
   tools: [
     {
       name: 'discord_send_message',
-      description: 'Send a message to a Discord channel via webhook. Use this tool when you need to post a plain text message to Discord.',
+      description: 'Send a message to a Discord channel via webhook. Use this tool when you need to post a plain text message to Discord. Automatically uses the "messages" webhook.',
       inputSchema: {
         type: 'object',
         properties: {
-          webhookName: {
-            type: 'string',
-            description: 'Name of the configured webhook to use (e.g., "releases", "announcements")',
-          },
           content: {
             type: 'string',
             description: 'Message content to send (max 2000 characters)',
@@ -67,19 +63,15 @@ server.setRequestHandler(ListToolsRequestSchema, async () => ({
             description: 'Output format for the response (default: markdown)',
           },
         },
-        required: ['webhookName', 'content'],
+        required: ['content'],
       },
     },
     {
       name: 'discord_send_announcement',
-      description: 'Send a formatted release announcement to Discord. Creates a rich embed with version, headline, change list, and optional download link. Perfect for software releases, updates, and feature announcements.',
+      description: 'Send a formatted release announcement to Discord. Creates a rich embed with version, headline, change list, and optional download link. Perfect for software releases, updates, and feature announcements. Automatically uses the "releases" webhook.',
       inputSchema: {
         type: 'object',
         properties: {
-          webhookName: {
-            type: 'string',
-            description: 'Name of the configured webhook to use',
-          },
           version: {
             type: 'string',
             description: 'Version number (e.g., "v2.6.0-beta", "1.0.0")',
@@ -132,19 +124,15 @@ server.setRequestHandler(ListToolsRequestSchema, async () => ({
             description: 'Output format for the response (default: markdown)',
           },
         },
-        required: ['webhookName', 'version', 'headline', 'changes'],
+        required: ['version', 'headline', 'changes'],
       },
     },
     {
       name: 'discord_send_teaser',
-      description: 'Send a teaser/preview announcement to Discord. Perfect for "coming soon" announcements and sneak peeks of upcoming features.',
+      description: 'Send a teaser/preview announcement to Discord. Perfect for "coming soon" announcements and sneak peeks of upcoming features. Automatically uses the "teasers" webhook.',
       inputSchema: {
         type: 'object',
         properties: {
-          webhookName: {
-            type: 'string',
-            description: 'Name of the configured webhook to use',
-          },
           version: {
             type: 'string',
             description: 'Version number (e.g., "v1.0.0-beta", "2.0.0")',
@@ -185,19 +173,15 @@ server.setRequestHandler(ListToolsRequestSchema, async () => ({
             description: 'Output format for the response (default: markdown)',
           },
         },
-        required: ['webhookName', 'version', 'headline', 'highlights'],
+        required: ['version', 'headline', 'highlights'],
       },
     },
     {
       name: 'discord_send_changelog',
-      description: 'Send a structured changelog post to Discord. Creates a rich embed with sections (e.g., Added/Changed/Fixed) or can send as plain text.',
+      description: 'Send a structured changelog post to Discord. Creates a rich embed with sections (e.g., Added/Changed/Fixed) or can send as plain text. Automatically uses the "changelog" webhook.',
       inputSchema: {
         type: 'object',
         properties: {
-          webhookName: {
-            type: 'string',
-            description: 'Name of the configured webhook to use',
-          },
           title: {
             type: 'string',
             description: 'Changelog title (max 256 characters)',
@@ -261,7 +245,7 @@ server.setRequestHandler(ListToolsRequestSchema, async () => ({
             description: 'Output format for the response (default: markdown)',
           },
         },
-        required: ['webhookName', 'title', 'sections'],
+        required: ['title', 'sections'],
       },
     },
     {

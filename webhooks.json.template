@@ -1,17 +1,22 @@
 {
+  "messages": {
+    "url": "https://discord.com/api/webhooks/YOUR_WEBHOOK_ID/YOUR_WEBHOOK_TOKEN",
+    "description": "General messages (discord_send_message)",
+    "added_at": "2000-01-01T00:00:00.000Z"
+  },
   "releases": {
     "url": "https://discord.com/api/webhooks/YOUR_WEBHOOK_ID/YOUR_WEBHOOK_TOKEN",
-    "description": "Release announcements",
+    "description": "Release announcements (discord_send_announcement)",
+    "added_at": "2000-01-01T00:00:00.000Z"
+  },
+  "teasers": {
+    "url": "https://discord.com/api/webhooks/YOUR_WEBHOOK_ID/YOUR_WEBHOOK_TOKEN",
+    "description": "Teaser announcements (discord_send_teaser)",
     "added_at": "2000-01-01T00:00:00.000Z"
   },
   "changelog": {
     "url": "https://discord.com/api/webhooks/YOUR_WEBHOOK_ID/YOUR_WEBHOOK_TOKEN",
-    "description": "Changelogs",
-    "added_at": "2000-01-01T00:00:00.000Z"
-  },
-  "general": {
-    "url": "https://discord.com/api/webhooks/YOUR_WEBHOOK_ID/YOUR_WEBHOOK_TOKEN",
-    "description": "General announcements",
+    "description": "Changelog posts (discord_send_changelog)",
     "added_at": "2000-01-01T00:00:00.000Z"
   }
 }
