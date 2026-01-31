@@ -62,6 +62,30 @@ export const sendTeaserInputSchema = z.object({
   responseFormat: z.nativeEnum(ResponseFormat).default(ResponseFormat.MARKDOWN),
 });
 
+export const sendChangelogInputSchema = z.object({
+  webhookName: z.string().min(1).max(50),
+  title: z.string().min(1).max(256),
+  sections: z
+    .array(
+      z.object({
+        title: z.string().min(1).max(256),
+        items: z.array(z.string()).min(1).max(25),
+      })
+    )
+    .min(1)
+    .max(25),
+  version: z.string().min(1).max(30).optional(),
+  summary: z.string().max(2000).optional(),
+  url: z.string().url().optional(),
+  style: z.nativeEnum(AnnouncementStyle).default(AnnouncementStyle.RELEASE),
+  useEmbed: z.boolean().default(true),
+  embedColor: z.string().regex(/^#[0-9A-Fa-f]{6}$/).optional(),
+  thumbnailUrl: z.string().url().optional(),
+  footerText: z.string().max(100).optional(),
+  username: z.string().max(80).optional(),
+  responseFormat: z.nativeEnum(ResponseFormat).default(ResponseFormat.MARKDOWN),
+});
+
 export const addWebhookInputSchema = z.object({
   name: z.string()
     .min(1)

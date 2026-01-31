@@ -3,7 +3,14 @@
  */
 
 import { AnnouncementStyle } from '../types/enums.js';
-import { LIVING_LANDS_LOGO_URL, KOFI_USERNAME, KOFI_URL } from '../constants.js';
+import {
+  DISCORD_EMBED_FIELD_VALUE_LIMIT,
+  DISCORD_EMBED_FIELDS_LIMIT,
+  DISCORD_EMBED_TOTAL_CHARS_LIMIT,
+  LIVING_LANDS_LOGO_URL,
+  KOFI_USERNAME,
+  KOFI_URL,
+} from '../constants.js';
 import type { DiscordEmbed } from '../types/interfaces.js';
 
 // Color mapping (Discord uses decimal values)
@@ -169,6 +176,74 @@ export function formatAnnouncement(params: {
   return lines.join('\n');
 }
 
+export function buildChangelogEmbed(params: {
+  title: string;
+  sections: Array<{ title: string; items: string[] }>;
+  version?: string;
+  summary?: string;
+  url?: string;
+  style: AnnouncementStyle;
+  embedColor?: string;
+  thumbnailUrl?: string;
+  footerText?: string;
+}): DiscordEmbed {
+  const color = parseColor(params.embedColor) ?? STYLE_COLORS[params.style];
+  const versionPrefix = params.version ? `${params.version} - ` : '';
+
+  const embed: DiscordEmbed = {
+    title: `${versionPrefix}${params.title}`,
+    description: params.summary,
+    color,
+    timestamp: new Date().toISOString(),
+    fields: [],
+  };
+
+  if (params.url) embed.url = params.url;
+
+  const availableFields = Math.min(params.sections.length, DISCORD_EMBED_FIELDS_LIMIT);
+  for (let i = 0; i < availableFields; i++) {
+    const section = params.sections[i]!;
+    const value = truncateEmbedFieldValue(section.items.map((it) => `- ${it}`).join('\n'));
+    embed.fields!.push({
+      name: section.title,
+      value,
+      inline: false,
+    });
+  }
+
+  // Thumbnail
+  embed.thumbnail = { url: params.thumbnailUrl ?? LIVING_LANDS_LOGO_URL };
+
+  // Footer
+  embed.footer = { text: params.footerText ?? 'Changelog' };
+
+  return ensureEmbedTotalCharsLimit(embed);
+}
+
+export function formatChangelog(params: {
+  title: string;
+  sections: Array<{ title: string; items: string[] }>;
+  version?: string;
+  summary?: string;
+  url?: string;
+}): string {
+  const lines: string[] = [];
+  lines.push(`**${params.version ? `${params.version} - ` : ''}${params.title}**`);
+  if (params.summary) lines.push(params.summary);
+  if (params.url) lines.push(params.url);
+  lines.push('');
+
+  for (const section of params.sections) {
+    lines.push(`**${section.title}**`);
+    for (const item of section.items) {
+      lines.push(`- ${item}`);
+    }
+    lines.push('');
+  }
+
+  return lines.join('\n').trimEnd();
+}
+
 function parseColor(hex?: string): number | null {
   if (!hex) return null;
   try {
@@ -176,4 +251,30 @@ function parseColor(hex?: string): number | null {
   } catch {
     return null;
   }
+}
+
+function truncateEmbedFieldValue(value: string): string {
+  if (value.length <= DISCORD_EMBED_FIELD_VALUE_LIMIT) return value;
+  return value.slice(0, DISCORD_EMBED_FIELD_VALUE_LIMIT - 1) + '…';
+}
+
+function ensureEmbedTotalCharsLimit(embed: DiscordEmbed): DiscordEmbed {
+  // Rough enforcement of 6000-char total embed limit (Discord).
+  const parts: string[] = [];
+  if (embed.title) parts.push(embed.title);
+  if (embed.description) parts.push(embed.description);
+  for (const f of embed.fields ?? []) {
+    parts.push(f.name, f.value);
+  }
+  if (embed.footer?.text) parts.push(embed.footer.text);
+
+  const total = parts.reduce((n, p) => n + p.length, 0);
+  if (total <= DISCORD_EMBED_TOTAL_CHARS_LIMIT) return embed;
+
+  const over = total - DISCORD_EMBED_TOTAL_CHARS_LIMIT;
+  if (!embed.description || embed.description.length === 0) return embed;
+
+  const newLen = Math.max(0, embed.description.length - over - 1);
+  embed.description = newLen > 0 ? embed.description.slice(0, newLen) + '…' : undefined;
+  return embed;
 }

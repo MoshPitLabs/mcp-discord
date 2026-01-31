@@ -10,6 +10,7 @@ export type WebhookConfig = z.infer<typeof schemas.webhookConfigSchema>;
 export type SendMessageInput = z.infer<typeof schemas.sendMessageInputSchema>;
 export type SendAnnouncementInput = z.infer<typeof schemas.sendAnnouncementInputSchema>;
 export type SendTeaserInput = z.infer<typeof schemas.sendTeaserInputSchema>;
+export type SendChangelogInput = z.infer<typeof schemas.sendChangelogInputSchema>;
 export type AddWebhookInput = z.infer<typeof schemas.addWebhookInputSchema>;
 export type RemoveWebhookInput = z.infer<typeof schemas.removeWebhookInputSchema>;
 export type ListWebhooksInput = z.infer<typeof schemas.listWebhooksInputSchema>;
