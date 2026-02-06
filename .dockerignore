@@ -1,0 +1,52 @@
+# Git
+.git
+.github
+.gitignore
+
+# Node modules (will be installed in container)
+node_modules
+
+# Build output (will be built in container)
+dist
+
+# Documentation
+*.md
+!README.md
+TECHNICAL_DESIGN.md
+IMPLEMENTATION_SUMMARY.md
+TESTING_GUIDE.md
+AGENTS.md
+CLAUDE.md
+
+# Config files
+webhooks.json
+webhooks.json.template
+.env
+.env.local
+
+# Lock files (except bun.lock which we need)
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+# IDE and editor files
+.vscode
+.idea
+*.swp
+*.swo
+*~
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Test files
+*.test.ts
+*.spec.ts
+test/
+tests/
+
+# Misc
+*.log
+*.tmp
+.cache

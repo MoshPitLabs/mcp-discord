@@ -20,6 +20,20 @@ A Model Context Protocol (MCP) server for Discord integration via webhooks - Typ
 - **Validation**: Zod for runtime type validation
 - **Language**: TypeScript with strict mode enabled
 
+## Quick Start
+
+**Nix (Remote - No Clone!):**
+```bash
+nix run github:MoshPitLabs/mcp-discord
+```
+
+**Docker (Local):**
+```bash
+git clone https://github.com/MoshPitLabs/mcp-discord.git && cd mcp-discord
+docker build -t discord-mcp-server .
+docker run -i discord-mcp-server
+```
+
 ## Installation
 
 ### Prerequisites
@@ -49,11 +63,55 @@ npm install
 npm run build
 ```
 
+### Using Docker
+
+```bash
+# Clone the repository first
+git clone https://github.com/MoshPitCodes/mcp-server-discord.git
+cd mcp-server-discord
+
+# Build the Docker image
+docker build -t discord-mcp-server .
+
+# Run the server (interactive mode for stdio communication)
+docker run -i discord-mcp-server
+
+# Or with volume mount for persistent webhook configuration
+docker run -i -v ~/.config/discord_mcp:/root/.config/discord_mcp discord-mcp-server
+
+# Using docker-compose
+docker-compose up -d
+```
+
 ### NixOS with Flakes
 
+**Remote Build (from GitHub - no clone needed!):**
+```bash
+# Run directly from remote
+nix run github:MoshPitLabs/mcp-discord
+
+# Build from remote
+nix build github:MoshPitLabs/mcp-discord
+
+# Pin to a specific commit or tag
+nix run github:MoshPitLabs/mcp-discord/v2.0.0
+
+# Generate MCP client configuration
+nix run github:MoshPitLabs/mcp-discord#generate-config -- claude-code
+nix run github:MoshPitLabs/mcp-discord#generate-config -- vscode
+```
+
+**Local Build:**
 ```bash
 # Enter development environment (automatically installs dependencies)
 nix develop
+
+# Build and run the package
+nix build
+./result/bin/discord-mcp --version
+
+# Or run directly
+nix run
 ```
 
 ## Configuration

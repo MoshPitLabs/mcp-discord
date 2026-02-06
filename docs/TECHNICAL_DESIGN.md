@@ -13,7 +13,7 @@ This document outlines the technical design for the Discord MCP Server built wit
 
 ### 1.1 Objectives
 
-- **MCP Tools**: Implement 6 essential Discord integration tools
+- **MCP Tools**: Implement 7 essential Discord integration tools
 - **Type Safety**: Leverage TypeScript's static typing with strict mode
 - **Runtime Validation**: Use Zod for comprehensive runtime validation
 - **Performance**: Utilize Bun's fast runtime and native APIs
@@ -57,8 +57,9 @@ This document outlines the technical design for the Discord MCP Server built wit
 │  │  - sendMessage        │  │  - Webhook Storage      │     │
 │  │  - sendAnnouncement   │  │  - HTTP Client Wrapper  │     │
 │  │  - sendTeaser         │  │  - Embed Builders       │     │
-│  │  - addWebhook         │  │  - Error Handling       │     │
-│  │  - removeWebhook      │  │  - Validators (Zod)     │     │
+│  │  - sendChangelog      │  │  - Error Handling       │     │
+│  │  - addWebhook         │  │  - Validators (Zod)     │     │
+│  │  - removeWebhook      │  │                         │     │
 │  │  - listWebhooks       │  └─────────────────────────┘     │
 │  └───────────────────────┘                                  │
 └───────────────────────────┬─────────────────────────────────┘
@@ -91,6 +92,7 @@ mcp-discord/
 │       ├── sendMessage.ts         # discord_send_message tool
 │       ├── sendAnnouncement.ts    # discord_send_announcement tool
 │       ├── sendTeaser.ts          # discord_send_teaser tool
+│       ├── sendChangelog.ts       # discord_send_changelog tool
 │       ├── addWebhook.ts          # discord_add_webhook tool
 │       ├── removeWebhook.ts       # discord_remove_webhook tool
 │       └── listWebhooks.ts        # discord_list_webhooks tool
@@ -720,6 +722,7 @@ export async function handleSendMessage(params: unknown): Promise<string> {
 - **sendMessage**: Simple text message posting
 - **sendAnnouncement**: Rich embed or plain text, length validation
 - **sendTeaser**: Teaser-specific embed with "coming soon" messaging
+- **sendChangelog**: Structured changelog with sections (Added/Changed/Fixed)
 - **addWebhook**: Validates URL, saves to storage
 - **removeWebhook**: Checks existence, removes from storage
 - **listWebhooks**: Sanitizes URLs, formats as markdown or JSON
@@ -740,6 +743,7 @@ import {
 import { handleSendMessage } from './tools/sendMessage.js';
 import { handleSendAnnouncement } from './tools/sendAnnouncement.js';
 import { handleSendTeaser } from './tools/sendTeaser.js';
+import { handleSendChangelog } from './tools/sendChangelog.js';
 import { handleAddWebhook } from './tools/addWebhook.js';
 import { handleRemoveWebhook } from './tools/removeWebhook.js';
 import { handleListWebhooks } from './tools/listWebhooks.js';
@@ -794,6 +798,9 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
         break;
       case 'discord_send_teaser':
         result = await handleSendTeaser(args);
+        break;
+      case 'discord_send_changelog':
+        result = await handleSendChangelog(args);
         break;
       case 'discord_add_webhook':
         result = await handleAddWebhook(args);
@@ -1050,7 +1057,7 @@ main().catch((error) => {
 
 ### 10.1 Functional Requirements
 
-- ✅ All 6 tools implemented with identical behavior
+- ✅ All 7 tools implemented with identical behavior
 - ✅ Webhook storage persists between restarts
 - ✅ Discord embeds render correctly
 - ✅ Error messages are user-friendly
