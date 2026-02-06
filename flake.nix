@@ -68,7 +68,7 @@
             cp -r dist node_modules package.json $out/lib/discord-mcp/
 
             mkdir -p $out/bin
-            cat > $out/bin/discord-mcp-server <<'WRAPPER'
+            cat > $out/bin/discord-mcp-server <<WRAPPER
             #!${pkgs.bash}/bin/bash
             exec ${pkgs.bun}/bin/bun run $out/lib/discord-mcp/dist/index.js "$@"
             WRAPPER
