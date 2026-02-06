@@ -22,19 +22,17 @@ A Model Context Protocol (MCP) server for Discord integration via webhooks - Typ
 
 ## Quick Start
 
+**Nix (Remote - No Clone!):**
+```bash
+nix run github:MoshPitLabs/mcp-discord
+```
+
 **Docker (Local):**
 ```bash
-git clone <repo> && cd <repo>
+git clone https://github.com/MoshPitLabs/mcp-discord.git && cd mcp-discord
 docker build -t discord-mcp-server .
 docker run -i discord-mcp-server
 ```
-
-**Nix (Remote - No Clone!):**
-```bash
-nix run github:MoshPitCodes/mcp-server-discord
-```
-
-See [BUILD.md](./BUILD.md) or [DOCKER_NIX_GUIDE.md](./DOCKER_NIX_GUIDE.md) for detailed instructions.
 
 ## Installation
 
@@ -87,6 +85,22 @@ docker-compose up -d
 
 ### NixOS with Flakes
 
+**Remote Build (from GitHub - no clone needed!):**
+```bash
+# Run directly from remote
+nix run github:MoshPitLabs/mcp-discord
+
+# Build from remote
+nix build github:MoshPitLabs/mcp-discord
+
+# Pin to a specific commit or tag
+nix run github:MoshPitLabs/mcp-discord/v2.0.0
+
+# Generate MCP client configuration
+nix run github:MoshPitLabs/mcp-discord#generate-config -- claude-code
+nix run github:MoshPitLabs/mcp-discord#generate-config -- vscode
+```
+
 **Local Build:**
 ```bash
 # Enter development environment (automatically installs dependencies)
@@ -94,22 +108,10 @@ nix develop
 
 # Build and run the package
 nix build
-./result/bin/discord-mcp
+./result/bin/discord-mcp --version
 
 # Or run directly
 nix run
-```
-
-**Remote Build (from GitHub):**
-```bash
-# Build directly from remote repository (no git clone needed!)
-nix build github:MoshPitCodes/mcp-server-discord
-
-# Run directly from remote
-nix run github:MoshPitCodes/mcp-server-discord
-
-# Enter dev shell from remote
-nix develop github:MoshPitCodes/mcp-server-discord
 ```
 
 ## Configuration
