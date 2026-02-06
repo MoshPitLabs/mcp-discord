@@ -36,19 +36,20 @@ Discord MCP Server built with TypeScript using the official Model Context Protoc
 - ✅ `errors.ts` - Centralized error handling
 
 ### MCP Tools (src/tools/)
-All 6 tools fully implemented:
+All 7 tools fully implemented:
 - ✅ `sendMessage.ts` - Send plain text messages
 - ✅ `sendAnnouncement.ts` - Send rich release announcements
 - ✅ `sendTeaser.ts` - Send teaser/preview announcements
+- ✅ `sendChangelog.ts` - Send structured changelog posts
 - ✅ `addWebhook.ts` - Add/update webhook configurations
 - ✅ `removeWebhook.ts` - Remove webhook configurations
 - ✅ `listWebhooks.ts` - List webhooks with URL sanitization
 
 ### MCP Server (src/index.ts)
 - ✅ Server initialization with stdio transport
-- ✅ All 6 tools registered with proper schemas
+- ✅ All 7 tools registered with proper schemas
 - ✅ Request routing and error handling
-- ✅ Comprehensive input schemas for OpenCode
+- ✅ Comprehensive input schemas for Claude Code
 
 ### Configuration Files
 - ✅ `package.json` - Full metadata and scripts
@@ -104,6 +105,7 @@ src/
 | send_message | ✅ Complete |
 | send_announcement | ✅ Complete |
 | send_teaser | ✅ Complete |
+| send_changelog | ✅ Complete |
 | add_webhook | ✅ Complete |
 | remove_webhook | ✅ Complete |
 | list_webhooks | ✅ Complete |
@@ -167,17 +169,17 @@ bun run build
 bun run typecheck  # Verify type safety
 ```
 
-### 2. Configure OpenCode
+### 2. Configure Claude Code
 
 ```bash
 # Add the server
-opencode mcp add discord --scope user -- bun ~/.opencode/mcp-servers/mcp-discord/src/index.ts
+Claude mcp add discord --scope user -- bun ~/.config/Claude/mcp-servers/mcp-discord/src/index.ts
 
 # Verify it's connected
-opencode mcp list  # Verify connection
+Claude mcp list  # Verify connection
 ```
 
-### 3. Test Tools in OpenCode
+### 3. Test Tools in Claude Code
 
 **Add a webhook:**
 ```
@@ -195,6 +197,13 @@ Send a release announcement for v2.0.0 with:
 - Headline: TypeScript Rewrite Complete!
 - Changes: Type safety, Better performance, Improved DX
 - Style: release
+```
+
+**Send a changelog:**
+```
+Send a changelog for "v2.1.0" with sections:
+- Added: New features
+- Fixed: Bug fixes
 ```
 
 **List webhooks:**
@@ -311,6 +320,6 @@ For issues or questions:
 
 The Discord MCP Server is **complete and production-ready**. The implementation provides complete Discord webhook integration with type safety, high performance, and excellent developer experience.
 
-The implementation follows TypeScript best practices, uses modern async/await patterns, and provides a robust user experience. All 6 MCP tools are fully functional and ready for immediate use with OpenCode.
+The implementation follows TypeScript best practices, uses modern async/await patterns, and provides a robust user experience. All 7 MCP tools are fully functional and ready for immediate use with Claude Code.
 
 **Status**: ✅ Ready for Production Use

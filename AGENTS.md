@@ -4,7 +4,7 @@ This document provides guidance for AI agents working on the Discord MCP Server 
 
 ## Project Overview
 
-**Discord MCP Server** is a Model Context Protocol (MCP) server that provides Discord webhook integration for AI assistants like OpenCode. Built with TypeScript and Bun, it enables seamless Discord communication through 6 MCP tools.
+**Discord MCP Server** is a Model Context Protocol (MCP) server that provides Discord webhook integration for AI assistants like Claude Code. Built with TypeScript and Bun, it enables seamless Discord communication through 7 MCP tools.
 
 **Tech Stack:**
 - **Runtime**: Bun (fast JavaScript runtime)
@@ -22,7 +22,7 @@ This document provides guidance for AI agents working on the Discord MCP Server 
   - `enums.ts` - ResponseFormat, AnnouncementStyle enums
   - `schemas.ts` - Zod validation schemas
   - `interfaces.ts` - TypeScript interfaces
-- `src/tools/` - MCP tool implementations (6 tools)
+- `src/tools/` - MCP tool implementations (7 tools)
 - `src/utils/` - Utility functions
   - `storage.ts` - Webhook configuration storage
   - `webhook.ts` - Discord API HTTP operations
@@ -101,14 +101,15 @@ bun run typecheck
 
 ## MCP Tools
 
-The server provides 6 MCP tools:
+The server provides 7 MCP tools:
 
 1. **discord_send_message** - Send plain text messages
 2. **discord_send_announcement** - Send rich release announcements
 3. **discord_send_teaser** - Send teaser/preview announcements
-4. **discord_add_webhook** - Add or update webhook configurations
-5. **discord_remove_webhook** - Remove webhook configurations
-6. **discord_list_webhooks** - List all configured webhooks
+4. **discord_send_changelog** - Send structured changelog posts
+5. **discord_add_webhook** - Add or update webhook configurations
+6. **discord_remove_webhook** - Remove webhook configurations
+7. **discord_list_webhooks** - List all configured webhooks
 
 ## Testing
 
@@ -314,7 +315,7 @@ When making changes:
 ### For Testing Agents
 
 - Follow procedures in `TESTING_GUIDE.md`
-- Test all 6 MCP tools
+- Test all 7 MCP tools
 - Verify Discord webhook integration
 - Check error handling paths
 

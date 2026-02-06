@@ -21,8 +21,9 @@
         devShells.default = pkgs.mkShell {
           buildInputs = with pkgs; [
             bun
-            nodejs_23
+            nodejs_22
             typescript
+            docker
           ];
 
           shellHook = ''
@@ -37,6 +38,10 @@
             echo "  bun run build  - Build for production"
             echo "  bun run typecheck - Type check without emitting"
             echo ""
+            echo "Docker Commands:"
+            echo "  docker build -t discord-mcp-server . - Build Docker image"
+            echo "  docker run -i discord-mcp-server     - Run in Docker"
+            echo ""
 
             # Auto-install dependencies if needed
             if [ ! -d "node_modules" ]; then
@@ -49,7 +54,7 @@
         # Package for running the server
         packages.default = pkgs.stdenv.mkDerivation {
           pname = "discord-mcp-server";
-          version = "0.1.0";
+          version = "2.0.0";
           src = ./.;
 
           nativeBuildInputs = [ pkgs.bun ];

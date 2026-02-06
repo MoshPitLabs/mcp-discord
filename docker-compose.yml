@@ -1,0 +1,33 @@
+version: '3.8'
+
+services:
+  discord-mcp-server:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: discord-mcp-server:latest
+    container_name: discord-mcp-server
+    
+    # Use stdin_open for stdio communication
+    stdin_open: true
+    tty: false
+    
+    # Mount webhook configuration for persistence
+    volumes:
+      - ./webhooks-data:/root/.config/discord_mcp
+    
+    # Environment variables
+    environment:
+      - DISCORD_MCP_CONFIG_DIR=/root/.config/discord_mcp
+    
+    # Resource limits
+    deploy:
+      resources:
+        limits:
+          memory: 128M
+          cpus: '0.5'
+        reservations:
+          memory: 64M
+          cpus: '0.25'
+    
+    restart: unless-stopped

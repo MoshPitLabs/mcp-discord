@@ -130,7 +130,28 @@ Something exciting is on the way... 🌱
 
 Check Discord - you should see a teaser embed!
 
-#### Test 6: Remove Webhook
+#### Test 6: Send a Changelog
+
+Ask OpenCode:
+```
+Send a changelog for "v2.1.0 Update" to the test webhook with sections:
+- Added: Discord changelog tool, New embed styles
+- Fixed: Memory leak in storage module, Webhook URL validation
+- Style: release
+```
+
+Expected response:
+```
+Changelog sent successfully!
+
+**Preview:**
+**v2.1.0 Update**
+...
+```
+
+Check Discord - you should see a structured changelog embed!
+
+#### Test 7: Remove Webhook
 
 Ask OpenCode:
 ```
@@ -235,6 +256,9 @@ Expected: Plain text success message
 - [ ] Send announcement includes download link when provided
 - [ ] Send teaser creates "coming soon" style embed
 - [ ] Send teaser uses correct styling
+- [ ] Send changelog creates structured sections
+- [ ] Send changelog supports multiple section types (Added/Changed/Fixed)
+- [ ] Send changelog can use plain text format
 
 ### Validation Tests
 - [ ] Rejects webhook URLs not starting with discord.com/api/webhooks/
